@@ -56,7 +56,7 @@ def collide_block(level, block_rect):
 
 
 def win(level, block_rect):
-    win_rect = pygame.Rect(level.win[0] * SCL, level.win[1] * SCL, SCL, SCL)
+    win_rect = pygame.Rect(level.end[0] * SCL, level.end[1] * SCL, SCL, SCL)
     if block_rect.colliderect(win_rect):
         print("win")
 
@@ -65,10 +65,10 @@ def update_score(self, level, screen):
     x_center = self.x + (SCL // 2)
     y_center = self.y + (SCL // 2)
     level = level
-    for checkpoint in level.checkpoints:
-        checkpoint_center = [checkpoint[0] * SCL + (SCL // 2), checkpoint[1] * SCL + (SCL // 2)]
-        pygame.draw.line(screen, WHITE, (x_center, y_center), (checkpoint_center[0], checkpoint_center[1]))
-        self.score = math.hypot(x_center - checkpoint_center[0], y_center - checkpoint_center[1])
+    end = level.end
+    checkpoint_center = [end[0] * SCL + (SCL // 2), end[1] * SCL + (SCL // 2)]
+    pygame.draw.line(screen, WHITE, (x_center, y_center), (checkpoint_center[0], checkpoint_center[1]))
+    self.score = math.hypot(x_center - checkpoint_center[0], y_center - checkpoint_center[1])
 
 
 class Block:

@@ -18,16 +18,10 @@ CLOCK = pygame.time.Clock()
 FONT = pygame.font.Font(None, 18)
 
 # map
-MAP = Map(Level1())
+MAP = Map(TestingLevel())
 
 # blocks
-blocks = []
-
-# best move set
-best_move_set = []
-
-# last call time
-last_call_time = pygame.time.get_ticks()
+BLOCK = Block(MAP.level)
 
 
 def manual_movement():
@@ -54,17 +48,6 @@ def random_movement(block):
     return dir
 
 
-def update_best_move_set():
-    global best_move_set
-    best_block_score = math.inf
-    best_set = None
-    for block in blocks:
-        if block.score < best_block_score:
-            best_block_score = block.score
-            best_set = block.move_set
-    best_move_set = best_set
-
-
 def show_f3(clock):
     fps = "FPS: " + str(round(clock.get_fps()))
     pixel = "Pixel: [" + str(pygame.mouse.get_pos()[0]) + ", " + str(pygame.mouse.get_pos()[1]) + "]"
@@ -82,37 +65,17 @@ def update():
     MAP.update(SCREEN)
     for ball in MAP.level.balls:
         ball.update(SCREEN)
-    for block in blocks:
-        if best_move_set is not []:
-            block.update(SCREEN, random_movement(block))
-        else:
-            for dir in best_move_set:
-                block.update(SCREEN, dir)
-        win(MAP.level, block.block_rect)
-        update_score(block, MAP.level, SCREEN)
+    BLOCK.update(SCREEN, manual_movement())
+    win(MAP.level, BLOCK.block_rect)
+    update_score(BLOCK, MAP.level, SCREEN)
     # if collide_block(MAP.level, BLOCK.block_rect):
     #     pass
     show_f3(CLOCK)
     pygame.display.update()
 
 
-def reset_map():
-    global MAP
-    global blocks
-    MAP = Map(Level1())
-    blocks = []
-    for i in range(5):
-        blocks.append(Block(MAP.level))
-
-
 def game_loop():
-    global last_call_time
     while True:
-        curr_time = pygame.time.get_ticks()
-        if curr_time - last_call_time >= 5000:
-            update_best_move_set()
-            reset_map()
-            last_call_time = curr_time
         CLOCK.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -122,5 +85,4 @@ def game_loop():
 
 
 if __name__ == "__main__":
-    reset_map()
     game_loop()
