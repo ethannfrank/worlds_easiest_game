@@ -8,7 +8,7 @@ class Map:
         self.level = level
         self.board_rects = []
 
-    def update(self, screen):
+    def draw(self, screen):
         colors = {0: ZERO_COLOR, 1: ONE_COLOR, 2: TWO_COLOR, 3: THREE_COLOR}
 
         for x in range(len(self.level.arr)):

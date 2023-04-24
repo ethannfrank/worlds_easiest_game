@@ -36,10 +36,11 @@ class Ball:
         self.dir = dir
         self.rect_x = self.row * SCL + (SCL // 2) - BALL_RADIUS
         self.rect_y = self.col * SCL + (SCL // 2) - BALL_RADIUS
+        self.ball_center = [self.rect_x + BALL_RADIUS, self.rect_y + BALL_RADIUS]
 
     def draw(self, screen):
-        center = (self.rect_x + BALL_RADIUS, self.rect_y + BALL_RADIUS)
-        pygame.draw.circle(screen, BALL_COLOR, center, BALL_RADIUS)
+        self.ball_center = [self.rect_x + BALL_RADIUS, self.rect_y + BALL_RADIUS]
+        pygame.draw.circle(screen, BALL_COLOR, self.ball_center, BALL_RADIUS)
 
     def move(self):
         if collided(self):

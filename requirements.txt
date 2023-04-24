@@ -1,1 +1,9 @@
-pygame~=2.3.0
+pip==23.1
+pygame==2.3.0
+setuptools==67.6.1
+wheel==0.40.0
+visualize~=0.5.1
+graphviz~=0.20.1
+matplotlib~=3.7.1
+numpy~=1.24.2
+neat-python==0.92

@@ -1,18 +1,6 @@
-import math
-
 import pygame
 
 from settings import *
-
-
-def update_score(self, screen):
-    x_center = self.x + (SCL // 2)
-    y_center = self.y + (SCL // 2)
-    level = self.level
-    end = level.end
-    checkpoint_center = [end[0] * SCL + (SCL // 2), end[1] * SCL + (SCL // 2)]
-    pygame.draw.line(screen, WHITE, (x_center, y_center), (checkpoint_center[0], checkpoint_center[1]))
-    self.score = math.hypot(x_center - checkpoint_center[0], y_center - checkpoint_center[1])
 
 
 def collided(self, dir):
