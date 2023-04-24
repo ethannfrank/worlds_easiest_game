@@ -6,20 +6,18 @@ from settings import *
 class Map:
     def __init__(self, level):
         self.level = level
+        self.board_rects = []
 
     def update(self, screen):
-        for x in range(self.level.rows):
-            for y in range(self.level.cols):
-                rect = pygame.Rect(y * SCL, x * SCL, SCL, SCL)
-                # blank cell
-                # if self.level.arr[x][y] == 0:
-                #     pygame.draw.rect(screen, ZERO_COLOR, rect)
-                # darker cell
-                if self.level.arr[x][y] == 1:
-                    pygame.draw.rect(screen, ONE_COLOR, rect)
-                # lighter cell
-                elif self.level.arr[x][y] == 2:
-                    pygame.draw.rect(screen, TWO_COLOR, rect)
-                # spawn cell
-                elif self.level.arr[x][y] == 3:
-                    pygame.draw.rect(screen, THREE_COLOR, rect)
+        colors = {0: ZERO_COLOR, 1: ONE_COLOR, 2: TWO_COLOR, 3: THREE_COLOR}
+
+        for x in range(len(self.level.arr)):
+            for y in range(len(self.level.arr[0])):
+                if self.level.arr[x][y] != 0:
+                    rect = pygame.Rect(y * SCL, x * SCL, SCL, SCL)
+                    self.board_rects.append(rect)
+                    pygame.draw.rect(screen, colors[self.level.arr[x][y]], rect)
+
+        # draw bounds rects
+        # for bound_rect in self.level.bounds_rects:
+        #     pygame.draw.rect(screen, RED, bound_rect)

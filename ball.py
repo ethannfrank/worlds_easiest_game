@@ -18,13 +18,14 @@ def switch_dir(dir):
         return 1, 0
 
 
-def collide(screen, level, ball_rect):
-    collide_lines = level.lines
-    for line in collide_lines:
-        pygame.draw.line(screen, BLACK, (line[0][0] * SCL, line[0][1] * SCL), (line[1][0] * SCL, line[1][1] * SCL))
-        if ball_rect.clipline((line[0][0] * SCL, line[0][1] * SCL), (line[1][0] * SCL, line[1][1] * SCL)):
-            return True
-    return False
+def collided(self):
+    new_x = self.rect_x + (self.dir[0] * BALL_SPEED)
+    new_y = self.rect_y + (self.dir[1] * BALL_SPEED)
+    new_ball_rect = pygame.Rect(new_x, new_y, BALL_RADIUS * 2, BALL_RADIUS * 2)
+    if new_ball_rect.collidelist(self.level.bounds_rects) != -1:
+        return True
+    else:
+        return False
 
 
 class Ball:
@@ -36,13 +37,12 @@ class Ball:
         self.rect_x = self.row * SCL + (SCL // 2) - BALL_RADIUS
         self.rect_y = self.col * SCL + (SCL // 2) - BALL_RADIUS
 
-    def update(self, screen):
+    def draw(self, screen):
         center = (self.rect_x + BALL_RADIUS, self.rect_y + BALL_RADIUS)
         pygame.draw.circle(screen, BALL_COLOR, center, BALL_RADIUS)
-        ball_collide_rect = pygame.Rect(self.rect_x, self.rect_y, BALL_RADIUS * 2, BALL_RADIUS * 2)
-        # red ball_collide_rect
-        # pygame.draw.rect(screen, RED, ball_collide_rect)
-        if collide(screen, self.level, ball_collide_rect):
+
+    def move(self):
+        if collided(self):
             self.dir = switch_dir(self.dir)
         self.rect_x += self.dir[0] * BALL_SPEED
         self.rect_y += self.dir[1] * BALL_SPEED

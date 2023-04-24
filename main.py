@@ -10,41 +10,25 @@ pygame.init()
 # window
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("World's Easiest Game")
-
 # clock
 CLOCK = pygame.time.Clock()
-
 # font
 FONT = pygame.font.Font(None, 18)
-
 # map
 MAP = Map(TestingLevel())
-
 # blocks
 BLOCK = Block(MAP.level)
 
 
 def manual_movement():
     keys = pygame.key.get_pressed()
-    dir = [0, 0]
-    # up
-    if keys[pygame.K_w]:
-        dir[1] = -1
-    # down
-    if keys[pygame.K_s]:
-        dir[1] = 1
-    # right
-    if keys[pygame.K_d]:
-        dir[0] = 1
-    # left
-    if keys[pygame.K_a]:
-        dir[0] = -1
-    return dir
+    x_dir = keys[pygame.K_d] - keys[pygame.K_a]  # calculate the x direction using subtraction
+    y_dir = keys[pygame.K_s] - keys[pygame.K_w]  # calculate the y direction using subtraction
+    return [x_dir, y_dir]
 
 
-def random_movement(block):
+def random_movement():
     dir = [random.randint(-1, 1), random.randint(-1, 1)]
-    block.move_set.append(dir)
     return dir
 
 
@@ -55,23 +39,36 @@ def show_f3(clock):
     fps_surface = FONT.render(fps, True, WHITE)
     pixel_surface = FONT.render(pixel, True, WHITE)
     row_col_surface = FONT.render(row_col, True, WHITE)
-    SCREEN.blit(fps_surface, (5, 305))
-    SCREEN.blit(pixel_surface, (5, 317))
-    SCREEN.blit(row_col_surface, (5, 329))
+    SCREEN.blit(fps_surface, (55, 305))
+    SCREEN.blit(pixel_surface, (55, 317))
+    SCREEN.blit(row_col_surface, (55, 329))
+
+
+def load_map():
+    global MAP
+    MAP = Map(TestingLevel())
 
 
 def update():
+    # bg
     SCREEN.fill(BACKGROUND_COLOR)
+    # map
     MAP.update(SCREEN)
+    # balls
     for ball in MAP.level.balls:
-        ball.update(SCREEN)
-    BLOCK.update(SCREEN, manual_movement())
-    win(MAP.level, BLOCK.block_rect)
-    update_score(BLOCK, MAP.level, SCREEN)
-    # if collide_block(MAP.level, BLOCK.block_rect):
-    #     pass
+        ball.draw(SCREEN)
+    # block
+    BLOCK.draw(SCREEN)
+    # draw score line
+    update_score(BLOCK, SCREEN)
     show_f3(CLOCK)
     pygame.display.update()
+
+
+def move():
+    for ball in MAP.level.balls:
+        ball.move()
+    BLOCK.move(manual_movement())
 
 
 def game_loop():
@@ -82,7 +79,9 @@ def game_loop():
                 pygame.quit()
                 sys.exit()
         update()
+        move()
 
 
 if __name__ == "__main__":
+    load_map()
     game_loop()

@@ -11,7 +11,7 @@ FPS = 60
 # Block Settings
 BLOCK_SIZE = 24
 BLOCK_SPEED = 2
-BLOCK_COLLISION = 2
+BLOCK_COLLISION = 1
 
 # Ball Settings
 BALL_RADIUS = 12
